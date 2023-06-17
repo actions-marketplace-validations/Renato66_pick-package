@@ -1,105 +1,52 @@
-<p align="center">
-  <a href="https://github.com/actions/typescript-action/actions"><img alt="typescript-action status" src="https://github.com/actions/typescript-action/workflows/build-test/badge.svg"></a>
-</p>
+# Pick Package
 
-# Create a JavaScript Action using TypeScript
+The Pick Package action is an action for downloading only the necessary files during Continuous Integration (CI) workflows. It allows you to selectively grab dependencies that will be used in your workflow while ignoring other dependencies. This action helps optimize your CI process by reducing unnecessary downloads and improving build times.
 
-Use this template to bootstrap the creation of a TypeScript action.:rocket:
+## Usage
 
-This template includes compilation support, tests, a validation workflow, publishing, and versioning guidance.  
+To use the Pick Package action, follow the steps below:
 
-If you are new, there's also a simpler introduction.  See the [Hello World JavaScript Action](https://github.com/actions/hello-world-javascript-action)
+1. Add the Pick Package action to your workflow file, `ci-workflow.yml` or any name you prefer.
 
-## Create an action from this template
+2. Define the necessary inputs in the workflow file. The inputs for this action are as follows:
 
-Click the `Use this Template` and provide the new repo details for your action
+- `dependencies`: Specify the dependencies you want to download. Each dependency should be listed on a separate line using [this](#examples) format.
+- `clear-resolutions` (optional): Set this input to `true` if you want to clear any existing resolutions in your `package.json` file. Default is `false`.
 
-## Code in Main
-
-> First, you'll need to have a reasonably modern version of `node` handy. This won't work with versions older than 9, for instance.
-
-Install the dependencies  
-```bash
-$ npm install
-```
-
-Build the typescript and package it for distribution
-```bash
-$ npm run build && npm run package
-```
-
-Run the tests :heavy_check_mark:  
-```bash
-$ npm test
-
- PASS  ./index.test.js
-  ✓ throws invalid number (3ms)
-  ✓ wait 500 ms (504ms)
-  ✓ test runs (95ms)
-
-...
-```
-
-## Change action.yml
-
-The action.yml defines the inputs and output for your action.
-
-Update the action.yml with your name, description, inputs and outputs for your action.
-
-See the [documentation](https://help.github.com/en/articles/metadata-syntax-for-github-actions)
-
-## Change the Code
-
-Most toolkit and CI/CD operations involve async operations so the action is run in an async function.
-
-```javascript
-import * as core from '@actions/core';
-...
-
-async function run() {
-  try { 
-      ...
-  } 
-  catch (error) {
-    core.setFailed(error.message);
-  }
-}
-
-run()
-```
-
-See the [toolkit documentation](https://github.com/actions/toolkit/blob/master/README.md#packages) for the various packages.
-
-## Publish to a distribution branch
-
-Actions are run from GitHub repos so we will checkin the packed dist folder. 
-
-Then run [ncc](https://github.com/zeit/ncc) and push the results:
-```bash
-$ npm run package
-$ git add dist
-$ git commit -a -m "prod dependencies"
-$ git push origin releases/v1
-```
-
-Note: We recommend using the `--license` option for ncc, which will create a license file for all of the production node modules used in your project.
-
-Your action is now published! :rocket: 
-
-See the [versioning documentation](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md)
-
-## Validate
-
-You can now validate the action by referencing `./` in a workflow in your repo (see [test.yml](.github/workflows/test.yml))
+3. Use the Pick Package action in your workflow:
 
 ```yaml
-uses: ./
-with:
-  milliseconds: 1000
+name: CI Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  pick-package:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Pick Package
+        uses: Renato66/pick-package@v1
+        with:
+          clear-resolutions: true
+          dependencies: |
+            jest
+            prettier
+      [...]
 ```
 
-See the [actions tab](https://github.com/actions/typescript-action/actions) for runs of this action! :rocket:
+In this example, the action is triggered on the `push` event to the `main` branch. The action uses the Pick Package action, specifying the dependencies to be downloaded.
 
-## Usage:
+In this example, running the action with the specified dependencies will download the versions of `@actions/core` and `@types/node` declared on your package.json
 
-After testing you can [create a v1 tag](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md) to reference the stable and latest V1 action
+## Conclusion
+
+The Pick Package action simplifies the process of downloading only the necessary files for your CI workflows. By allowing you to specify the desired dependencies, it reduces unnecessary downloads and improves build times. Feel free to use and customize this action to fit your CI.
+
+If you have any feedback, suggestions, or issues related to this action, please don't hesitate to visit the [GitHub repository](https://github.com/Renato66/pick-package) and contribute. Happy CI building!
