@@ -1,6 +1,8 @@
 name: 'Pick package'
 description: 'Pick some scripts from package.json with a fixed version pre defined'
 author: 'Renato66'
+icon: 'align-left'
+color: 'green'
 inputs:
   dependencies:
     required: true
