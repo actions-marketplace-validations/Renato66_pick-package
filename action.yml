@@ -6,6 +6,9 @@ inputs:
   dependencies:
     required: true
     description: 'dependencies splited by line break'
+  clean-resolutions:
+    description: 'return empty object for resolutions'
+
 runs:
   using: 'node16'
   main: 'dist/index.js'
