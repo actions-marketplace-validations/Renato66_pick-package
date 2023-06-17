@@ -1,11 +1,10 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Pick package'
+description: 'Pick some scripts from package.json with a fixed version pre defined'
+author: 'Renato66'
 inputs:
-  milliseconds: # change this
+  dependencies:
     required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+    description: 'dependencies splited by line break'
 runs:
   using: 'node16'
   main: 'dist/index.js'
