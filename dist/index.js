@@ -50,6 +50,7 @@ function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const dependencies = (0, get_array_from_string_1.default)((0, core_1.getInput)('dependencies', { required: true }));
+            const clearResolutions = ((0, core_1.getInput)('clear-resolutions') || '').toUpperCase() === 'TRUE';
             const pkgPath = (0, core_1.getInput)('path') || './package.json';
             const resolvePath = path_1.default.resolve(process.cwd(), pkgPath);
             if (!fs_1.default.existsSync(resolvePath)) {
@@ -57,19 +58,19 @@ function run() {
             }
             const jsonStr = yield fs_1.default.promises.readFile(resolvePath);
             const jsonObj = JSON.parse(jsonStr.toString());
-            if (dependencies) {
-                const clean = dependencies.reduce((acc, dependency) => {
-                    const version = jsonObj.dependencies[dependency] ||
-                        jsonObj.devDependencies[dependency];
-                    if (!version) {
-                        (0, core_1.warning)(`No version found for ${dependency}`);
-                        return acc;
-                    }
-                    return Object.assign({ [dependency]: version }, acc);
-                }, {});
-                jsonObj.dependencies = clean;
-                jsonObj.devDependencies = {};
+            const clean = dependencies.reduce((acc, dependency) => {
+                const version = jsonObj.dependencies[dependency] || jsonObj.devDependencies[dependency];
+                if (!version) {
+                    (0, core_1.warning)(`No version found for ${dependency}`);
+                    return acc;
+                }
+                return Object.assign({ [dependency]: version }, acc);
+            }, {});
+            jsonObj.dependencies = clean;
+            if (clearResolutions) {
+                jsonObj.resolutions = {};
             }
+            jsonObj.devDependencies = {};
             yield fs_1.default.promises.writeFile(resolvePath, JSON.stringify(jsonObj, null, 2));
             (0, core_1.debug)(JSON.stringify(jsonObj, null, 2));
         }
