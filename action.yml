@@ -6,7 +6,7 @@ inputs:
   dependencies:
     required: true
     description: 'dependencies splited by line break'
-  clean-resolutions:
+  clear-resolutions:
     description: 'return empty object for resolutions'
 
 runs:
