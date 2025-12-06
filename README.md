@@ -12,6 +12,7 @@ To use the Pick Package action, follow the steps below:
 
 - `dependencies`: Specify the dependencies you want to download. Each dependency should be listed on a separate line using [this](#examples) format.
 - `clear-resolutions` (optional): Set this input to `true` if you want to clear any existing resolutions in your `package.json` file. Default is `false`.
+- `clear-prepare` (optional): Set this input to `true` if you want to clear any existing `prepare` script in your `package.json` file. Default is `false`.
 
 3. Use the Pick Package action in your workflow:
 
@@ -35,6 +36,7 @@ jobs:
         uses: Renato66/pick-package@v1
         with:
           clear-resolutions: true
+          clear-prepare: true
           dependencies: |
             jest
             prettier

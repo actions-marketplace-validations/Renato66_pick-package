@@ -5,9 +5,11 @@ author: 'Renato66'
 inputs:
   dependencies:
     required: true
-    description: 'dependencies splited by line break'
+    description: 'dependencies splitted by line break'
   clear-resolutions:
     description: 'return empty object for resolutions'
+  clear-prepare:
+    description: 'remove prepare from scripts'
 
 runs:
   using: 'node16'

@@ -9,7 +9,13 @@ async function run(): Promise<void> {
       getInput('dependencies', {required: true})
     )
     const clearResolutions =
-      (getInput('clear-resolutions') || '').toUpperCase() === 'TRUE'
+      (
+        getInput('clear-resolutions', {trimWhitespace: true}) || ''
+      ).toUpperCase() === 'TRUE'
+    const clearPrepare =
+      (
+        getInput('clear-prepare', {trimWhitespace: true}) || ''
+      ).toUpperCase() === 'TRUE'
     const pkgPath = getInput('path') || './package.json'
     const resolvePath = path.resolve(process.cwd(), pkgPath)
     if (!fs.existsSync(resolvePath)) {
@@ -33,6 +39,11 @@ async function run(): Promise<void> {
     jsonObj.dependencies = clean
     if (clearResolutions) {
       jsonObj.resolutions = {}
+    }
+    if (clearPrepare) {
+      const scripts = jsonObj.scripts
+      delete scripts.prepare
+      jsonObj.scripts = scripts
     }
     jsonObj.devDependencies = {}
 
